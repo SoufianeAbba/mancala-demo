@@ -1,7 +1,7 @@
 
 # mancala web implementation
 
-A mancala web implementation by Soufiane Abba for bol.com. Build with Java Spring boot and H2 database for the backend. Vanilla html, css and js for the frontend. 
+A mancala web implementation by Soufiane Abba. Build with Java Spring boot and H2 database for the backend. Vanilla html, css and js for the frontend. 
 
 The game currently only has the option to play online with someone else randomly.
 
