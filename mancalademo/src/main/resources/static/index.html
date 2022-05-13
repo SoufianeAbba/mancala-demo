@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mancala by Soufiane Abba</title>
+        <link href="/main.css" rel="stylesheet">      
+        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script> 
+    </head>
+    <body>
+        <noscript>
+            <h2 style="color: #ff0000">Seems your browser doesn't support Javascript! This game relies on Javascript being enabled. Please enable Javascript and reload this page!</h2>
+        </noscript>
+        <div id="main-content" class="container">   
+            <div id="screen-menu" class="container-menu">
+                <div class="header-content">
+                    <p id="mancala-header">Play Mancala</p>
+                    <div id="mancala-dot"></div>
+                </div>
+                <div class="container-menubuttons"> 
+                    <div id="button-online" class="menubutton"> 
+                        <span class="menubuttontext">Online</span>
+                    </div>
+                    <!-- <div id="button-local" class="menubutton"> 
+                        <span class="menubuttontext">Local</span>
+                    </div>
+                    <div id="button-computer" class="menubutton"> 
+                        <span class="menubuttontext">Computer</span>
+                    </div>-->
+                </div>
+            </div>
+            <div id="screen-playing" class="container-playing">
+                <div id="button-quit" class="menubutton"> 
+                    <span class="menubuttontext">quit</span>
+                </div>
+                <h1 id="current-player"></h1>
+                <div class="container-mancalapits">
+                    <div id="mancalapit-top-6" class="mancalapit-big green"></div>
+                    <div class="container-mancalapit-small">
+                        <div class="container-mancalapit-small-playerrow">
+                            <div id="mancalapit-top-5" class="mancalapit-single green"></div>
+                            <div id="mancalapit-top-4" class="mancalapit-single green"></div>
+                            <div id="mancalapit-top-3" class="mancalapit-single green"></div>
+                            <div id="mancalapit-top-2" class="mancalapit-single green"></div>
+                            <div id="mancalapit-top-1" class="mancalapit-single green"></div>
+                            <div id="mancalapit-top-0" class="mancalapit-single green"></div>
+                        </div>
+                        <div class="container-mancalapit-small-playerrow">
+                            <div id="mancalapit-bottom-0" class="mancalapit-single purple"></div>
+                            <div id="mancalapit-bottom-1" class="mancalapit-single purple"></div>
+                            <div id="mancalapit-bottom-2" class="mancalapit-single purple"></div>
+                            <div id="mancalapit-bottom-3" class="mancalapit-single purple"></div>
+                            <div id="mancalapit-bottom-4" class="mancalapit-single purple"></div>
+                            <div id="mancalapit-bottom-5" class="mancalapit-single purple"></div>
+                        </div>
+                    </div>
+                    <div id="mancalapit-bottom-6" class="mancalapit-big purple"></div>
+                </div>
+            </div>
+        </div>
+        <div id="popDiv">
+        </div>
+        <script src="/app.js"></script>
+    </body>
+</html>
