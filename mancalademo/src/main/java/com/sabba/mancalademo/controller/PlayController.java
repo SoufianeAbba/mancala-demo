@@ -24,16 +24,18 @@ import com.sabba.mancalademo.repository.GameSessionRepository;
 @RestController
 @RequestMapping("/play")
 public class PlayController {
-	@Autowired
 	GameSessionRepository gameSessionRepository;
-	
-	@Autowired
 	SimpMessagingTemplate simpMessagingTemplate;
-	
+
+	public PlayController(GameSessionRepository gameSessionRepository, SimpMessagingTemplate simpMessagingTemplate)
+	{
+		this.gameSessionRepository = gameSessionRepository;
+		this.simpMessagingTemplate = simpMessagingTemplate;
+	}
+
 	@PostMapping("/online")
 	public ResponseEntity<Payload> createOrJoinGameSession() {
 		GameSession gameSession = gameSessionRepository.findByGameStatusEnum(GameStatusEnum.NEW);
-		Payload payload = new Payload();
 		
 		if (gameSession == null) {
 			String sessionId = UUID.randomUUID().toString();
@@ -41,56 +43,63 @@ public class PlayController {
 			int numberOfSmallPitsPerSide = 6;
 			int numberOfStonesPerPit = 6;
 			gameSession = gameSessionRepository.save(new GameSession(sessionId, firstPlayer, numberOfSmallPitsPerSide, numberOfStonesPerPit));
-			payload.setPayloadAction(PayloadActionEnum.PLAYGAME);
-			payload.setGameSession(gameSession);
+			var payload = new Payload(gameSession, "", PayloadActionEnum.PLAYGAME);
+
+			return new ResponseEntity<>(payload, HttpStatus.ACCEPTED);
 		}
 		else {
 			String secondPlayer = UUID.randomUUID().toString();
 			gameSession.setSecondPlayer(secondPlayer);
 			gameSession.setGameStatusEnum(GameStatusEnum.INPROGRESS);
 			gameSessionRepository.save(gameSession);
-			payload.setPayloadAction(PayloadActionEnum.PLAYGAME);
-			payload.setGameSession(gameSession);
+			var payload = new Payload(gameSession, "", PayloadActionEnum.PLAYGAME);
 
 			simpMessagingTemplate.convertAndSend("/topic/game-progress/" + gameSession.getSessionId(), payload);
+			return new ResponseEntity<>(payload, HttpStatus.ACCEPTED);
 		}
-
-		return new ResponseEntity<>(payload, HttpStatus.ACCEPTED);
 	}
 	
 	@PostMapping("/sow")
     public ResponseEntity<Payload> sow(@RequestBody Sow sow) {
 		GameSession gameSession = gameSessionRepository.findBySessionId(sow.getSessionId());
-		Payload payload = new Payload();
 
 		if (gameSession.getGameStatusEnum() == GameStatusEnum.NEW) {
-			payload.setErrorMessage("It is not possible to make a move. The game is still waiting for an opponent.");
-			payload.setPayloadAction(PayloadActionEnum.SHOWERROR);
+			var payload = new Payload(null,
+					"It is not possible to make a move. The game is still waiting for an opponent.",
+					PayloadActionEnum.SHOWERROR);
+			return new ResponseEntity<>(payload, HttpStatus.ACCEPTED);
 		}
 		else if (gameSession.getGameStatusEnum() == GameStatusEnum.FINISHED) {
-			payload.setErrorMessage("It is not possible to make a move. The game is finished");
-			payload.setPayloadAction(PayloadActionEnum.SHOWERROR);
+			var payload = new Payload(null,
+					"It is not possible to make a move. The game is finished",
+					PayloadActionEnum.SHOWERROR);
+			return new ResponseEntity<>(payload, HttpStatus.ACCEPTED);
 		}
 		else if (!Objects.equals(gameSession.getNextUp(), sow.getPlayer())) {
-			payload.setErrorMessage("It is not your turn yet.");
-			payload.setPayloadAction(PayloadActionEnum.SHOWERROR);
+			var payload = new Payload(null,
+					"It is not your turn yet.",
+					PayloadActionEnum.SHOWERROR);
+			return new ResponseEntity<>(payload, HttpStatus.ACCEPTED);
 		}
 		else if (!gameSession.CheckIfPlayerSelectedOwnPit(sow)) {
-			payload.setErrorMessage("Select your own pit!");
-			payload.setPayloadAction(PayloadActionEnum.SHOWERROR);
+			var payload = new Payload(null,
+					"Select your own pit!",
+					PayloadActionEnum.SHOWERROR);
+			return new ResponseEntity<>(payload, HttpStatus.ACCEPTED);
 		}
 		else if (gameSession.CheckIfPlayerSelectedOwnPit(sow) && gameSession.CheckIfPlayerSelectedAnEmptyPit(sow)) {
-			payload.setErrorMessage("You selected an empty pit! Try again!");
-			payload.setPayloadAction(PayloadActionEnum.SHOWERROR);
+			var payload = new Payload(null,
+					"You selected an empty pit! Try again!",
+					PayloadActionEnum.SHOWERROR);
+			return new ResponseEntity<>(payload, HttpStatus.ACCEPTED);
 		}
 		else {
 			gameSession.sow(sow);
 			gameSession = gameSessionRepository.save(gameSession);
-			payload.setGameSession(gameSession);
-			payload.setPayloadAction(PayloadActionEnum.PLAYGAME);
-			simpMessagingTemplate.convertAndSend("/topic/game-progress/" + gameSession.getSessionId(), payload);
-		}
+			var payload = new Payload(gameSession, "", PayloadActionEnum.PLAYGAME);
 
-        return new ResponseEntity<>(payload, HttpStatus.ACCEPTED);
+			simpMessagingTemplate.convertAndSend("/topic/game-progress/" + gameSession.getSessionId(), payload);
+			return new ResponseEntity<>(payload, HttpStatus.ACCEPTED);
+		}
     }
 }

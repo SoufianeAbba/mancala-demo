@@ -1,8 +1,5 @@
 package com.sabba.mancalademo.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
