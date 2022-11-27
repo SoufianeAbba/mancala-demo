@@ -24,8 +24,8 @@ import com.sabba.mancalademo.repository.GameSessionRepository;
 @RestController
 @RequestMapping("/play")
 public class PlayController {
-	GameSessionRepository gameSessionRepository;
-	SimpMessagingTemplate simpMessagingTemplate;
+	private final GameSessionRepository gameSessionRepository;
+	private final SimpMessagingTemplate simpMessagingTemplate;
 
 	public PlayController(GameSessionRepository gameSessionRepository, SimpMessagingTemplate simpMessagingTemplate)
 	{
