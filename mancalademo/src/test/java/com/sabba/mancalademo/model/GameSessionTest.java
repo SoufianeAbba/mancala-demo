@@ -45,34 +45,28 @@ class GameSessionTest {
 		gameSession.setSecondPlayer(secondPlayer);
 		gameSession.setGameStatusEnum(GameStatusEnum.INPROGRESS);
 		
-		Sow sow = new Sow(sessionId, firstPlayer, 3, 0);
+		var sow = new Sow(sessionId, firstPlayer, 3, 0);
 		gameSession.sow(sow);	
 		int[] player2Pits = new int[]{7, 7, 7, 6, 6, 6, 0};
 		int[] player1Pits = new int[]{6, 6, 6, 0, 7, 7, 1};
 		assertArrayEquals(player2Pits, gameSession.getMancalaPits()[1]);
 		assertArrayEquals(player1Pits, gameSession.getMancalaPits()[0]);
-		
-		sow.setPlayer(secondPlayer);
-		sow.setPitIndex(0);
-		sow.setRowIndex(1);
+
+		sow = new Sow(sessionId, secondPlayer, 0, 1);
 		gameSession.sow(sow);
 		player2Pits = new int[]{0, 8, 8, 7, 7, 7, 1};
 		player1Pits = new int[]{7, 6, 6, 0, 7, 7, 1};
 		assertArrayEquals(player2Pits, gameSession.getMancalaPits()[1]);
 		assertArrayEquals(player1Pits, gameSession.getMancalaPits()[0]);
-		
-		sow.setPlayer(firstPlayer);
-		sow.setPitIndex(0);
-		sow.setRowIndex(0);
+
+		sow = new Sow(sessionId, firstPlayer, 0, 0);
 		gameSession.sow(sow);
 		player2Pits = new int[]{1, 8, 8, 7, 7, 7, 1};
 		player1Pits = new int[]{0, 7, 7, 1, 8, 8, 2};
 		assertArrayEquals(player2Pits, gameSession.getMancalaPits()[1]);
 		assertArrayEquals(player1Pits, gameSession.getMancalaPits()[0]);
-		
-		sow.setPlayer(secondPlayer);
-		sow.setPitIndex(3);
-		sow.setRowIndex(1);
+
+		sow = new Sow(sessionId, secondPlayer, 3, 1);
 		gameSession.sow(sow);
 		player2Pits = new int[]{1, 8, 8, 0, 8, 8, 2};
 		player1Pits = new int[]{1, 8, 8, 2, 8, 8, 2};

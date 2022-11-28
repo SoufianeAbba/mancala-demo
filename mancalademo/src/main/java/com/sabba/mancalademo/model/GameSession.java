@@ -144,19 +144,19 @@ public class GameSession {
 	public boolean CheckIfPlayerSelectedOwnPit(Sow sow) {
 		int playerPitSide = 0;
 
-		if (Objects.equals(firstPlayer, sow.getPlayer())) {
+		if (Objects.equals(firstPlayer, sow.player())) {
 			playerPitSide = 0;
 		}
 		
-		if (Objects.equals(secondPlayer, sow.getPlayer())) {
+		if (Objects.equals(secondPlayer, sow.player())) {
 			playerPitSide = 1;
 		}
 
-		return (playerPitSide == sow.getRowIndex());
+		return (playerPitSide == sow.rowIndex());
 	}
 
 	public boolean CheckIfPlayerSelectedAnEmptyPit(Sow sow) {
-		return (mancalaPits[sow.getRowIndex()][sow.getPitIndex()] == 0);
+		return (mancalaPits[sow.rowIndex()][sow.pitIndex()] == 0);
 	}
 
 	private void checkIfGameIsFinished() {
@@ -182,17 +182,17 @@ public class GameSession {
 	public void sow(Sow sow) {
 		int playerPitSide = 0;
 
-		if (Objects.equals(firstPlayer, sow.getPlayer())) {
+		if (Objects.equals(firstPlayer, sow.player())) {
 			playerPitSide = 0;
 		}
 		
-		if (Objects.equals(secondPlayer, sow.getPlayer())) {
+		if (Objects.equals(secondPlayer, sow.player())) {
 			playerPitSide = 1;
 		}
 
 		// Sow stones, skip opponent big pits.
-		int currentPitSideToSow = sow.getRowIndex();
-		int currentPitIndex = sow.getPitIndex();
+		int currentPitSideToSow = sow.rowIndex();
+		int currentPitIndex = sow.pitIndex();
 		int bigPitIndex = mancalaPits[currentPitSideToSow].length - 1;
 		int stonesToSow = mancalaPits[currentPitSideToSow][currentPitIndex] + 1;
 		mancalaPits[currentPitSideToSow][currentPitIndex] = -1;	

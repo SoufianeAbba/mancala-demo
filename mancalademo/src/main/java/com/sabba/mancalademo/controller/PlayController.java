@@ -61,7 +61,7 @@ public class PlayController {
 	
 	@PostMapping("/sow")
     public ResponseEntity<Payload> sow(@RequestBody Sow sow) {
-		GameSession gameSession = gameSessionRepository.findBySessionId(sow.getSessionId());
+		GameSession gameSession = gameSessionRepository.findBySessionId(sow.sessionId());
 
 		if (gameSession.getGameStatusEnum() == GameStatusEnum.NEW) {
 			var payload = new Payload(null,
@@ -75,7 +75,7 @@ public class PlayController {
 					PayloadActionEnum.SHOWERROR);
 			return new ResponseEntity<>(payload, HttpStatus.ACCEPTED);
 		}
-		else if (!Objects.equals(gameSession.getNextUp(), sow.getPlayer())) {
+		else if (!Objects.equals(gameSession.getNextUp(), sow.player())) {
 			var payload = new Payload(null,
 					"It is not your turn yet.",
 					PayloadActionEnum.SHOWERROR);
